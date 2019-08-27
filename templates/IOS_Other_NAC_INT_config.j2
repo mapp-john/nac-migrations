@@ -1,0 +1,36 @@
+!
+{% for int in dot1x_ints  %}
+default interface range {{ int.int_name }}
+interface range {{ int.int_name }}
+ shutdown
+ description 802.1x user port
+ switchport access vlan {{ access_vlan }}
+ switchport mode access
+ switchport nonegotiate
+ switchport voice vlan {{ voice_vlan }}
+ ip access-group ACL-DEFAULT in
+ authentication control-direction in
+ authentication event fail action next-method
+ authentication event server dead action authorize vlan {{ access_vlan }}
+ authentication event server dead action authorize voice
+ authentication event no-response action authorize vlan {{ auth_fail_vlan }}
+ authentication event server alive action reinitialize
+ authentication host-mode multi-domain
+ authentication order mab dot1x
+ authentication priority dot1x mab
+ authentication port-control auto
+ authentication periodic
+ authentication timer reauthenticate server
+ authentication timer inactivity 30000
+ authentication violation restrict
+ mab
+ snmp trap mac-notification change added
+ snmp trap mac-notification change removed
+ dot1x pae authenticator
+ dot1x timeout tx-period 5
+ dot1x timeout supp-timeout 5
+ spanning-tree portfast
+ spanning-tree bpduguard enable
+ no shutdown
+{% endfor %}
+
