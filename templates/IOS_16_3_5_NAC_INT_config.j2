@@ -1,0 +1,15 @@
+{# IOS XE 16.3.5 Config on Cat 3K Feb 21 #}
+!
+{% for int in dot1x_ints  %}
+default interface range {{ int.int_name }}
+interface range {{ int.int_name }}
+ shutdown
+ description 802.1x user port
+ ip access-group ACL-DEFAULT in
+ snmp trap mac-notification change added
+ snmp trap mac-notification change removed
+ source template DEVICE_ACCESS_TEMPLATE
+ service-policy output QUEUE-OUTPUT-LAN
+ no shutdown
+!
+{% endfor %}
