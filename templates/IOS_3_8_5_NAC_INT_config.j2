@@ -1,0 +1,17 @@
+{# IOS XE 3.8.5e Config on Cat 4K Jan 26 #}
+!
+{% for int in dot1x_ints  %}
+default interface range {{ int.int_name }}
+interface range {{ int.int_name }}
+ shutdown
+ description 802.1x user port
+ ip access-group ACL-DEFAULT in
+ snmp trap mac-notification change added
+ snmp trap mac-notification change removed
+ source template DEVICE_ACCESS_TEMPLATE
+ dot1x timeout tx-period 10
+ dot1x timeout supp-timeout 10
+ service-policy output QUEUE-OUTPUT-LAN
+ no shutdown
+!
+{% endfor %}
