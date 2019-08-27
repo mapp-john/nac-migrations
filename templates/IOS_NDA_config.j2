@@ -1,0 +1,935 @@
+
+username ndaadmin privilege 15 secret 0 BackupLocalPassword
+{# IF 1 #}
+{% if region == 1 %}
+
+{# __CONFIGURATION FOR IOS 12x,15x,3x__ #}
+{# IF 2 #}
+{% if version != "16" %}
+
+{# IF 3 #}
+{% if vrf is defined %}
+aaa group server tacacs+ NDA_NA
+server-private 192.168.1.2 timeout 5 key 0 PlainTextKey
+server-private 10.10.1.2  timeout 5 key 0 PlainTextKey
+server-private 172.25.1.2   timeout 5 key 0 PlainTextKey
+ip vrf forwarding {{ vrf }}
+ip tacacs source-interface {{ interface }}
+aaa authentication login default group NDA_NA local enable
+aaa authentication enable default group NDA_NA enable
+aaa authorization exec default group NDA_NA local if-authenticated
+aaa authorization commands 15 default group NDA_NA local if-authenticated
+aaa accounting exec default start-stop group NDA_NA
+aaa accounting commands 15 default start-stop group NDA_NA
+aaa accounting connection default start-stop group NDA_NA
+
+{# IF 4 #}
+{% if radiusgroups is defined %}
+aaa accounting system default vrf {{ vrf }} start-stop broadcast group {{ radiusgroups }} group NDA_NA
+{% else %}
+aaa accounting system default vrf {{ vrf }} start-stop group NDA_NA
+{% endif %}
+{# ENDIF 4 #}
+
+{# IF 4 #}
+{% if commandseven == "7" %}
+aaa authorization commands 7 default group NDA_NA if-authenticated
+aaa accounting commands 7 default start-stop group NDA_NA
+{% endif %}
+{# ENDIF 4 #}
+
+{# IF 4 #}
+{% if commandszero == "0" %}
+no aaa authorization commands 0 default group {{ aaagroup }} local if-authenticated
+no aaa accounting commands 0 default start-stop group {{ aaagroup }}
+{% endif %}
+{# ENDIF 4 #}
+
+{# IF 4 #}
+{% if commandsone == "1" %}
+no aaa authorization commands 1 default group {{ aaagroup }} local if-authenticated
+no aaa accounting commands 1 default start-stop group {{ aaagroup }}
+{% endif %}
+{# ENDIF 4 #}
+
+{# IF 4 #}
+{% if tacvrf == "tacvrf" %}
+no aaa authorization exec TACVRF group TACVRF
+{% endif %}
+{# ENDIF 4 #}
+
+{# IF 4 #}
+{% if aaagroup is defined %}
+no aaa group server tacacs+ {{ aaagroup }}
+{% endif %}
+{# ENDIF 4 #}
+
+{# IF 4 #}
+{% if servers is defined %}
+{% for server in servers %}
+no tacacs-server host  {{ server }}
+{% endfor %}
+{% endif %}
+{# ENDIF 4 #}
+
+{# IF 4 #}
+{% if old_key is defined %}
+no {{ old_key }}
+{% endif %}
+{# ENDIF 4 #}
+
+
+
+{% else %}
+
+aaa group server tacacs+ NDA_NA
+server-private 192.168.1.2 timeout 5 key 0 PlainTextKey
+server-private 10.10.1.2  timeout 5 key 0 PlainTextKey
+server-private 172.25.1.2   timeout 5 key 0 PlainTextKey
+ip tacacs source-interface {{ interface }}
+aaa authentication login default group NDA_NA local enable
+aaa authentication enable default group NDA_NA enable
+aaa authorization exec default group NDA_NA local if-authenticated
+aaa authorization commands 15 default group NDA_NA local if-authenticated
+aaa accounting exec default start-stop group NDA_NA
+aaa accounting commands 15 default start-stop group NDA_NA
+aaa accounting connection default start-stop group NDA_NA
+
+{# IF 4 #}
+{% if radiusgroups is defined %}
+aaa accounting system default start-stop broadcast group {{ radiusgroups }} group NDA_NA
+{% else %}
+aaa accounting system default start-stop group NDA_NA
+{% endif %}
+{# ENDIF 4 #}
+
+{# IF 4 #}
+{% if commandseven == "7" %}
+aaa authorization commands 7 default group NDA_NA if-authenticated
+aaa accounting commands 7 default start-stop group NDA_NA
+{% endif %}
+{# ENDIF 4 #}
+
+{# IF 4 #}
+{% if commandszero == "0" %}
+no aaa authorization commands 0 default group {{ aaagroup }} local if-authenticated
+no aaa accounting commands 0 default start-stop group {{ aaagroup }}
+{% endif %}
+{# ENDIF 4 #}
+
+{# IF 4 #}
+{% if commandsone == "1" %}
+no aaa authorization commands 1 default group {{ aaagroup }} local if-authenticated
+no aaa accounting commands 1 default start-stop group {{ aaagroup }}
+{% endif %}
+{# ENDIF 4 #}
+
+{# IF 4 #}
+{% if tacvrf == "tacvrf" %}
+no aaa authorization exec TACVRF group TACVRF
+{% endif %}
+{# ENDIF 4 #}
+
+{# IF 4 #}
+{% if aaagroup is defined %}
+no aaa group server tacacs+ {{ aaagroup }}
+{% endif %}
+{# ENDIF 4 #}
+
+{# IF 4 #}
+{% if servers is defined %}
+{% for server in servers %}
+no tacacs-server host  {{ server }}
+{% endfor %}
+{% endif %}
+{# ENDIF 4 #}
+
+{# IF 4 #}
+{% if old_key is defined %}
+no {{ old_key }}
+{% endif %}
+{# ENDIF 4 #}
+
+{% endif %}
+{# ENDIF 3 #}
+
+
+{# __CONFIGURATION FOR IOS 16x__ #}
+{% else %}
+
+
+{# IF 3 #}
+{% if vrf is defined %}
+
+tacacs server NDA-NA
+ address ipv4 192.168.1.2
+ key 0 PlainTextKey
+ timeout 5
+ single-connection
+tacacs server NDA-AP
+ address ipv4 10.10.1.2
+ key 0 PlainTextKey
+ timeout 5
+ single-connection
+tacacs server NDA-EAME
+ address ipv4 172.25.1.2
+ key 0 PlainTextKey
+ timeout 5
+ single-connection
+aaa group server tacacs+ NDA_NA
+ server name NDA-NA
+ server name NDA-AP
+ server name NDA-EAME
+ ip vrf forwarding {{ vrf }}
+ ip tacacs source-interface {{ interface }}
+aaa authentication login default group NDA_NA local enable
+aaa authentication enable default group NDA_NA enable
+aaa authorization exec default group NDA_NA local if-authenticated
+aaa authorization commands 15 default group NDA_NA local if-authenticated
+aaa accounting exec default start-stop group NDA_NA
+aaa accounting commands 15 default start-stop group NDA_NA
+aaa accounting connection default start-stop group NDA_NA
+
+{# IF 4 #}
+{% if radiusgroups is defined %}
+aaa accounting system default vrf {{ vrf }} start-stop broadcast group {{ radiusgroups }} group NDA_NA
+{% else %}
+aaa accounting system default vrf {{ vrf }} start-stop group NDA_NA
+{% endif %}
+{# ENDIF 4 #}
+
+{# IF 4 #}
+{% if commandseven == "7" %}
+aaa authorization commands 7 default group NDA_NA if-authenticated
+aaa accounting commands 7 default start-stop group NDA_NA
+{% endif %}
+{# ENDIF 4 #}
+
+{# IF 4 #}
+{% if commandszero == "0" %}
+no aaa authorization commands 0 default group {{ aaagroup }} local if-authenticated
+no aaa accounting commands 0 default start-stop group {{ aaagroup }}
+{% endif %}
+{# ENDIF 4 #}
+
+{# IF 4 #}
+{% if commandsone == "1" %}
+no aaa authorization commands 1 default group {{ aaagroup }} local if-authenticated
+no aaa accounting commands 1 default start-stop group {{ aaagroup }}
+{% endif %}
+{# ENDIF 4 #}
+
+{# IF 4 #}
+{% if tacvrf == "tacvrf" %}
+no aaa authorization exec TACVRF group TACVRF
+{% endif %}
+{# ENDIF 4 #}
+
+{# IF 4 #}
+{% if aaagroup is defined %}
+no aaa group server tacacs+ {{ aaagroup }}
+{% endif %}
+{# ENDIF 4 #}
+
+{# IF 4 #}
+{% if servers is defined %}
+{% for server in servers %}
+no tacacs-server host  {{ server }}
+{% endfor %}
+{% endif %}
+{# ENDIF 4 #}
+
+{# IF 4 #}
+{% if old_key is defined %}
+no {{ old_key }}
+{% endif %}
+{# ENDIF 4 #}
+
+
+{% else %}
+
+tacacs server NDA-NA
+ address ipv4 192.168.1.2
+ key 0 PlainTextKey
+ timeout 5
+ single-connection
+tacacs server NDA-AP
+ address ipv4 10.10.1.2
+ key 0 PlainTextKey
+ timeout 5
+ single-connection
+tacacs server NDA-EAME
+ address ipv4 172.25.1.2
+ key 0 PlainTextKey
+ timeout 5
+ single-connection
+aaa group server tacacs+ NDA_NA
+ server name NDA-NA
+ server name NDA-AP
+ server name NDA-EAME
+ ip tacacs source-interface {{ interface }}
+aaa authentication login default group NDA_NA local enable
+aaa authentication enable default group NDA_NA enable
+aaa authorization exec default group NDA_NA local if-authenticated
+aaa authorization commands 15 default group NDA_NA local if-authenticated
+aaa accounting exec default start-stop group NDA_NA
+aaa accounting commands 15 default start-stop group NDA_NA
+aaa accounting connection default start-stop group NDA_NA
+
+{# IF 4 #}
+{% if radiusgroups is defined %}
+aaa accounting system default start-stop broadcast group {{ radiusgroups }} group NDA_NA
+{% else %}
+aaa accounting system default start-stop group NDA_NA
+{% endif %}
+{# ENDIF 4 #}
+
+{# IF 4 #}
+{% if commandseven == "7" %}
+aaa authorization commands 7 default group NDA_NA if-authenticated
+aaa accounting commands 7 default start-stop group NDA_NA
+{% endif %}
+{# ENDIF 4 #}
+
+{# IF 4 #}
+{% if commandszero == "0" %}
+no aaa authorization commands 0 default group {{ aaagroup }} local if-authenticated
+no aaa accounting commands 0 default start-stop group {{ aaagroup }}
+{% endif %}
+{# ENDIF 4 #}
+
+{# IF 4 #}
+{% if commandsone == "1" %}
+no aaa authorization commands 1 default group {{ aaagroup }} local if-authenticated
+no aaa accounting commands 1 default start-stop group {{ aaagroup }}
+{% endif %}
+{# ENDIF 4 #}
+
+{# IF 4 #}
+{% if tacvrf == "tacvrf" %}
+no aaa authorization exec TACVRF group TACVRF
+{% endif %}
+{# ENDIF 4 #}
+
+{# IF 4 #}
+{% if aaagroup is defined %}
+no aaa group server tacacs+ {{ aaagroup }}
+{% endif %}
+{# ENDIF 4 #}
+
+{# IF 4 #}
+{% if servers is defined %}
+{% for server in servers %}
+no tacacs-server host  {{ server }}
+{% endfor %}
+{% endif %}
+{# ENDIF 4 #}
+
+{# IF 4 #}
+{% if old_key is defined %}
+no {{ old_key }}
+{% endif %}
+{# ENDIF 4 #}
+
+
+{% endif %}
+{# ENDIF 3 #}
+{% endif %}
+{# ENDIF 2#}
+
+
+
+{% elif region == 2 %}
+
+{# __CONFIGURATION FOR IOS 12x,15x,3x__ #}
+{% if version != "16" %}
+
+{% if vrf is defined %}
+aaa group server tacacs+ NDA_EAME
+server-private 172.25.1.2   timeout 5 key 0 PlainTextKey
+server-private 192.168.1.2 timeout 5 key 0 PlainTextKey
+server-private 10.10.1.2  timeout 5 key 0 PlainTextKey
+ip vrf forwarding {{ vrf }}
+ip tacacs source-interface {{ interface }}
+aaa authentication login default group NDA_EAME local enable
+aaa authentication enable default group NDA_EAME enable
+aaa authorization exec default group NDA_EAME local if-authenticated
+aaa authorization commands 15 default group NDA_EAME local if-authenticated
+aaa accounting exec default start-stop group NDA_EAME
+aaa accounting commands 15 default start-stop group NDA_EAME
+aaa accounting connection default start-stop group NDA_EAME
+
+{% if radiusgroups is defined %}
+aaa accounting system default vrf {{ vrf }} start-stop broadcast group {{ radiusgroups }} group NDA_EAME
+{% else %}
+aaa accounting system default vrf {{ vrf }} start-stop group NDA_EAME
+{% endif %}
+
+{# IF 4 #}
+{% if commandseven == "7" %}
+aaa authorization commands 7 default group NDA_EAME if-authenticated
+aaa accounting commands 7 default start-stop group NDA_EAME
+{% endif %}
+{# ENDIF 4 #}
+
+{# IF 4 #}
+{% if commandszero == "0" %}
+no aaa authorization commands 0 default group {{ aaagroup }} local if-authenticated
+no aaa accounting commands 0 default start-stop group {{ aaagroup }}
+{% endif %}
+{# ENDIF 4 #}
+
+{# IF 4 #}
+{% if commandsone == "1" %}
+no aaa authorization commands 1 default group {{ aaagroup }} local if-authenticated
+no aaa accounting commands 1 default start-stop group {{ aaagroup }}
+{% endif %}
+{# ENDIF 4 #}
+
+{# IF 4 #}
+{% if tacvrf == "tacvrf" %}
+no aaa authorization exec TACVRF group TACVRF
+{% endif %}
+{# ENDIF 4 #}
+
+{% if aaagroup is defined %}
+no aaa group server tacacs+ {{ aaagroup }}
+{% endif %}
+
+{% if servers is defined %}
+{% for server in servers %}
+no tacacs-server host  {{ server }}
+{% endfor %}
+{% endif %}
+
+{% if old_key is defined %}
+no {{ old_key }}
+{% endif %}
+
+
+{% else %}
+
+aaa group server tacacs+ NDA_EAME
+server-private 172.25.1.2   timeout 5 key 0 PlainTextKey
+server-private 192.168.1.2 timeout 5 key 0 PlainTextKey
+server-private 10.10.1.2  timeout 5 key 0 PlainTextKey
+ip tacacs source-interface {{ interface }}
+aaa authentication login default group NDA_EAME local enable
+aaa authentication enable default group NDA_EAME enable
+aaa authorization exec default group NDA_EAME local if-authenticated
+aaa authorization commands 15 default group NDA_EAME local if-authenticated
+aaa accounting exec default start-stop group NDA_EAME
+aaa accounting commands 15 default start-stop group NDA_EAME
+aaa accounting connection default start-stop group NDA_EAME
+
+{% if radiusgroups is defined %}
+aaa accounting system default start-stop broadcast group {{ radiusgroups }} group NDA_EAME
+{% else %}
+aaa accounting system default start-stop group NDA_EAME
+{% endif %}
+
+{# IF 4 #}
+{% if commandseven == "7" %}
+aaa authorization commands 7 default group NDA_EAME if-authenticated
+aaa accounting commands 7 default start-stop group NDA_EAME
+{% endif %}
+{# ENDIF 4 #}
+
+{# IF 4 #}
+{% if commandszero == "0" %}
+no aaa authorization commands 0 default group {{ aaagroup }} local if-authenticated
+no aaa accounting commands 0 default start-stop group {{ aaagroup }}
+{% endif %}
+{# ENDIF 4 #}
+
+{# IF 4 #}
+{% if commandsone == "1" %}
+no aaa authorization commands 1 default group {{ aaagroup }} local if-authenticated
+no aaa accounting commands 1 default start-stop group {{ aaagroup }}
+{% endif %}
+{# ENDIF 4 #}
+
+{# IF 4 #}
+{% if tacvrf == "tacvrf" %}
+no aaa authorization exec TACVRF group TACVRF
+{% endif %}
+{# ENDIF 4 #}
+
+{% if aaagroup is defined %}
+no aaa group server tacacs+ {{ aaagroup }}
+{% endif %}
+
+{% if servers is defined %}
+{% for server in servers %}
+no tacacs-server host  {{ server }}
+{% endfor %}
+{% endif %}
+
+{% if old_key is defined %}
+no {{ old_key }}
+{% endif %}
+
+{% endif %}
+
+
+{# __CONFIGURATION FOR IOS 16x__ #}
+{% else %}
+
+
+{% if vrf is defined %}
+tacacs server NDA-NA
+ address ipv4 192.168.1.2
+ key 0 PlainTextKey
+ timeout 5
+ single-connection
+tacacs server NDA-AP
+ address ipv4 10.10.1.2
+ key 0 PlainTextKey
+ timeout 5
+ single-connection
+tacacs server NDA-EAME
+ address ipv4 172.25.1.2
+ key 0 PlainTextKey
+ timeout 5
+ single-connection
+aaa group server tacacs+ NDA_EAME
+ server name NDA-EAME
+ server name NDA-NA
+ server name NDA-AP
+ ip vrf forwarding {{ vrf }}
+ ip tacacs source-interface {{ interface }}
+aaa authentication login default group NDA_EAME local enable
+aaa authentication enable default group NDA_EAME enable
+aaa authorization exec default group NDA_EAME local if-authenticated
+aaa authorization commands 15 default group NDA_EAME local if-authenticated
+aaa accounting exec default start-stop group NDA_EAME
+aaa accounting commands 15 default start-stop group NDA_EAME
+aaa accounting connection default start-stop group NDA_EAME
+
+{% if radiusgroups is defined %}
+aaa accounting system default vrf {{ vrf }} start-stop broadcast group {{ radiusgroups }} group NDA_EAME
+{% else %}
+aaa accounting system default vrf {{ vrf }} start-stop group NDA_EAME
+{% endif %}
+
+{# IF 4 #}
+{% if commandseven == "7" %}
+aaa authorization commands 7 default group NDA_EAME if-authenticated
+aaa accounting commands 7 default start-stop group NDA_EAME
+{% endif %}
+{# ENDIF 4 #}
+
+{# IF 4 #}
+{% if commandszero == "0" %}
+no aaa authorization commands 0 default group {{ aaagroup }} local if-authenticated
+no aaa accounting commands 0 default start-stop group {{ aaagroup }}
+{% endif %}
+{# ENDIF 4 #}
+
+{# IF 4 #}
+{% if commandsone == "1" %}
+no aaa authorization commands 1 default group {{ aaagroup }} local if-authenticated
+no aaa accounting commands 1 default start-stop group {{ aaagroup }}
+{% endif %}
+{# ENDIF 4 #}
+
+{# IF 4 #}
+{% if tacvrf == "tacvrf" %}
+no aaa authorization exec TACVRF group TACVRF
+{% endif %}
+{# ENDIF 4 #}
+
+{% if aaagroup is defined %}
+no aaa group server tacacs+ {{ aaagroup }}
+{% endif %}
+
+{% if servers is defined %}
+{% for server in servers %}
+no tacacs-server host  {{ server }}
+{% endfor %}
+{% endif %}
+
+{% if old_key is defined %}
+no {{ old_key }}
+{% endif %}
+
+
+{% else %}
+
+tacacs server NDA-NA
+ address ipv4 192.168.1.2
+ key 0 PlainTextKey
+ timeout 5
+ single-connection
+tacacs server NDA-AP
+ address ipv4 10.10.1.2
+ key 0 PlainTextKey
+ timeout 5
+ single-connection
+tacacs server NDA-EAME
+ address ipv4 172.25.1.2
+ key 0 PlainTextKey
+ timeout 5
+ single-connection
+aaa group server tacacs+ NDA_EAME
+ server name NDA-EAME
+ server name NDA-NA
+ server name NDA-AP
+ip tacacs source-interface {{ interface }}
+aaa authentication login default group NDA_EAME local enable
+aaa authentication enable default group NDA_EAME enable
+aaa authorization exec default group NDA_EAME local if-authenticated
+aaa authorization commands 15 default group NDA_EAME local if-authenticated
+aaa accounting exec default start-stop group NDA_EAME
+aaa accounting commands 15 default start-stop group NDA_EAME
+aaa accounting connection default start-stop group NDA_EAME
+
+{% if radiusgroups is defined %}
+aaa accounting system default start-stop broadcast group {{ radiusgroups }} group NDA_EAME
+{% else %}
+aaa accounting system default start-stop group NDA_EAME
+{% endif %}
+
+{# IF 4 #}
+{% if commandseven == "7" %}
+aaa authorization commands 7 default group NDA_EAME if-authenticated
+aaa accounting commands 7 default start-stop group NDA_EAME
+{% endif %}
+{# ENDIF 4 #}
+
+{# IF 4 #}
+{% if commandszero == "0" %}
+no aaa authorization commands 0 default group {{ aaagroup }} local if-authenticated
+no aaa accounting commands 0 default start-stop group {{ aaagroup }}
+{% endif %}
+{# ENDIF 4 #}
+
+{# IF 4 #}
+{% if commandsone == "1" %}
+no aaa authorization commands 1 default group {{ aaagroup }} local if-authenticated
+no aaa accounting commands 1 default start-stop group {{ aaagroup }}
+{% endif %}
+{# ENDIF 4 #}
+
+{# IF 4 #}
+{% if tacvrf == "tacvrf" %}
+no aaa authorization exec TACVRF group TACVRF
+{% endif %}
+{# ENDIF 4 #}
+
+{% if aaagroup is defined %}
+no aaa group server tacacs+ {{ aaagroup }}
+{% endif %}
+
+{% if servers is defined %}
+{% for server in servers %}
+no tacacs-server host  {{ server }}
+{% endfor %}
+{% endif %}
+
+{% if old_key is defined %}
+no {{ old_key }}
+{% endif %}
+
+
+{% endif %}
+{% endif %}
+
+
+
+{% elif region == 3 %}
+
+{# __CONFIGURATION FOR IOS 12x,15x,3x__ #}
+{% if version != "16" %}
+
+{% if vrf is defined %}
+aaa group server tacacs+ NDA_AP
+server-private 10.10.1.2  timeout 5 key 0 PlainTextKey
+server-private 172.25.1.2   timeout 5 key 0 PlainTextKey
+server-private 192.168.1.2 timeout 5 key 0 PlainTextKey
+ip vrf forwarding {{ vrf }}
+ip tacacs source-interface {{ interface }}
+aaa authentication login default group NDA_AP local enable
+aaa authentication enable default group NDA_AP enable
+aaa authorization exec default group NDA_AP local if-authenticated
+aaa authorization commands 15 default group NDA_AP local if-authenticated
+aaa accounting exec default start-stop group NDA_AP
+aaa accounting commands 15 default start-stop group NDA_AP
+aaa accounting connection default start-stop group NDA_AP
+
+{% if radiusgroups is defined %}
+aaa accounting system default vrf {{ vrf }} start-stop broadcast group {{ radiusgroups }} group NDA_AP
+{% else %}
+aaa accounting system default vrf {{ vrf }} start-stop group NDA_AP
+{% endif %}
+
+{# IF 4 #}
+{% if commandseven == "7" %}
+aaa authorization commands 7 default group NDA_AP if-authenticated
+aaa accounting commands 7 default start-stop group NDA_AP
+{% endif %}
+{# ENDIF 4 #}
+
+{# IF 4 #}
+{% if commandszero == "0" %}
+no aaa authorization commands 0 default group {{ aaagroup }} local if-authenticated
+no aaa accounting commands 0 default start-stop group {{ aaagroup }}
+{% endif %}
+{# ENDIF 4 #}
+
+{# IF 4 #}
+{% if commandsone == "1" %}
+no aaa authorization commands 1 default group {{ aaagroup }} local if-authenticated
+no aaa accounting commands 1 default start-stop group {{ aaagroup }}
+{% endif %}
+{# ENDIF 4 #}
+
+{# IF 4 #}
+{% if tacvrf == "tacvrf" %}
+no aaa authorization exec TACVRF group TACVRF
+{% endif %}
+{# ENDIF 4 #}
+
+{% if aaagroup is defined %}
+no aaa group server tacacs+ {{ aaagroup }}
+{% endif %}
+
+{% if servers is defined %}
+{% for server in servers %}
+no tacacs-server host  {{ server }}
+{% endfor %}
+{% endif %}
+
+{% if old_key is defined %}
+no {{ old_key }}
+{% endif %}
+
+
+{% else %}
+
+aaa group server tacacs+ NDA_AP
+server-private 10.10.1.2  timeout 5 key 0 PlainTextKey
+server-private 172.25.1.2   timeout 5 key 0 PlainTextKey
+server-private 192.168.1.2 timeout 5 key 0 PlainTextKey
+ip tacacs source-interface {{ interface }}
+aaa authentication login default group NDA_AP local enable
+aaa authentication enable default group NDA_AP enable
+aaa authorization exec default group NDA_AP local if-authenticated
+aaa authorization commands 15 default group NDA_AP local if-authenticated
+aaa accounting exec default start-stop group NDA_AP
+aaa accounting commands 15 default start-stop group NDA_AP
+aaa accounting connection default start-stop group NDA_AP
+
+{% if radiusgroups is defined %}
+aaa accounting system default start-stop broadcast group {{ radiusgroups }} group NDA_AP
+{% else %}
+aaa accounting system default start-stop group NDA_AP
+{% endif %}
+
+{# IF 4 #}
+{% if commandseven == "7" %}
+aaa authorization commands 7 default group NDA_AP if-authenticated
+aaa accounting commands 7 default start-stop group NDA_AP
+{% endif %}
+{# ENDIF 4 #}
+
+{# IF 4 #}
+{% if commandszero == "0" %}
+no aaa authorization commands 0 default group {{ aaagroup }} local if-authenticated
+no aaa accounting commands 0 default start-stop group {{ aaagroup }}
+{% endif %}
+{# ENDIF 4 #}
+
+{# IF 4 #}
+{% if commandsone == "1" %}
+no aaa authorization commands 1 default group {{ aaagroup }} local if-authenticated
+no aaa accounting commands 1 default start-stop group {{ aaagroup }}
+{% endif %}
+{# ENDIF 4 #}
+
+{# IF 4 #}
+{% if tacvrf == "tacvrf" %}
+no aaa authorization exec TACVRF group TACVRF
+{% endif %}
+{# ENDIF 4 #}
+
+{% if aaagroup is defined %}
+no aaa group server tacacs+ {{ aaagroup }}
+{% endif %}
+
+{% if servers is defined %}
+{% for server in servers %}
+no tacacs-server host  {{ server }}
+{% endfor %}
+{% endif %}
+
+{% if old_key is defined %}
+no {{ old_key }}
+{% endif %}
+
+{% endif %}
+
+
+{# __CONFIGURATION FOR IOS 16x__ #}
+{% else %}
+
+{% if vrf is defined %}
+
+tacacs server NDA-NA
+ address ipv4 192.168.1.2
+ key 0 PlainTextKey
+ timeout 5
+ single-connection
+tacacs server NDA-AP
+ address ipv4 10.10.1.2
+ key 0 PlainTextKey
+ timeout 5
+ single-connection
+tacacs server NDA-EAME
+ address ipv4 172.25.1.2
+ key 0 PlainTextKey
+ timeout 5
+ single-connection
+aaa group server tacacs+ NDA_AP
+ server name NDA-AP
+ server name NDA-EAME
+ server name NDA-NA
+ ip vrf forwarding {{ vrf }}
+ ip tacacs source-interface {{ interface }}
+aaa authentication login default group NDA_AP local enable
+aaa authentication enable default group NDA_AP enable
+aaa authorization exec default group NDA_AP local if-authenticated
+aaa authorization commands 15 default group NDA_AP local if-authenticated
+aaa accounting exec default start-stop group NDA_AP
+aaa accounting commands 15 default start-stop group NDA_AP
+aaa accounting connection default start-stop group NDA_AP
+
+{% if radiusgroups is defined %}
+aaa accounting system default vrf {{ vrf }} start-stop broadcast group {{ radiusgroups }} group NDA_AP
+{% else %}
+aaa accounting system default vrf {{ vrf }} start-stop group NDA_AP
+{% endif %}
+
+{# IF 4 #}
+{% if commandseven == "7" %}
+aaa authorization commands 7 default group NDA_AP if-authenticated
+aaa accounting commands 7 default start-stop group NDA_AP
+{% endif %}
+{# ENDIF 4 #}
+
+{# IF 4 #}
+{% if commandszero == "0" %}
+no aaa authorization commands 0 default group {{ aaagroup }} local if-authenticated
+no aaa accounting commands 0 default start-stop group {{ aaagroup }}
+{% endif %}
+{# ENDIF 4 #}
+
+{# IF 4 #}
+{% if commandsone == "1" %}
+no aaa authorization commands 1 default group {{ aaagroup }} local if-authenticated
+no aaa accounting commands 1 default start-stop group {{ aaagroup }}
+{% endif %}
+{# ENDIF 4 #}
+
+{# IF 4 #}
+{% if tacvrf == "tacvrf" %}
+no aaa authorization exec TACVRF group TACVRF
+{% endif %}
+{# ENDIF 4 #}
+
+{% if aaagroup is defined %}
+no aaa group server tacacs+ {{ aaagroup }}
+{% endif %}
+
+{% if servers is defined %}
+{% for server in servers %}
+no tacacs-server host  {{ server }}
+{% endfor %}
+{% endif %}
+
+{% if old_key is defined %}
+no {{ old_key }}
+{% endif %}
+
+
+
+{% else %}
+
+tacacs server NDA-NA
+ address ipv4 192.168.1.2
+ key 0 PlainTextKey
+ timeout 5
+ single-connection
+tacacs server NDA-AP
+ address ipv4 10.10.1.2
+ key 0 PlainTextKey
+ timeout 5
+ single-connection
+tacacs server NDA-EAME
+ address ipv4 172.25.1.2
+ key 0 PlainTextKey
+ timeout 5
+ single-connection
+aaa group server tacacs+ NDA_AP
+ server name NDA-AP
+ server name NDA-EAME
+ server name NDA-NA
+ip tacacs source-interface {{ interface }}
+aaa authentication login default group NDA_AP local enable
+aaa authentication enable default group NDA_AP enable
+aaa authorization exec default group NDA_AP local if-authenticated
+aaa authorization commands 15 default group NDA_AP local if-authenticated
+aaa accounting exec default start-stop group NDA_AP
+aaa accounting commands 15 default start-stop group NDA_AP
+aaa accounting connection default start-stop group NDA_AP
+
+{% if radiusgroups is defined %}
+aaa accounting system default start-stop broadcast group {{ radiusgroups }} group NDA_AP
+{% else %}
+aaa accounting system default start-stop group NDA_AP
+{% endif %}
+
+{# IF 4 #}
+{% if commandseven == "7" %}
+aaa authorization commands 7 default group NDA_AP if-authenticated
+aaa accounting commands 7 default start-stop group NDA_AP
+{% endif %}
+{# ENDIF 4 #}
+
+{# IF 4 #}
+{% if commandszero == "0" %}
+no aaa authorization commands 0 default group {{ aaagroup }} local if-authenticated
+no aaa accounting commands 0 default start-stop group {{ aaagroup }}
+{% endif %}
+{# ENDIF 4 #}
+
+{# IF 4 #}
+{% if commandsone == "1" %}
+no aaa authorization commands 1 default group {{ aaagroup }} local if-authenticated
+no aaa accounting commands 1 default start-stop group {{ aaagroup }}
+{% endif %}
+{# ENDIF 4 #}
+
+{# IF 4 #}
+{% if tacvrf == "tacvrf" %}
+no aaa authorization exec TACVRF group TACVRF
+{% endif %}
+{# ENDIF 4 #}
+
+{% if aaagroup is defined %}
+no aaa group server tacacs+ {{ aaagroup }}
+{% endif %}
+
+{% if servers is defined %}
+{% for server in servers %}
+no tacacs-server host  {{ server }}
+{% endfor %}
+{% endif %}
+
+{% if old_key is defined %}
+no {{ old_key }}
+{% endif %}
+
+{% endif %}
+{% endif %}
+{% endif %}
