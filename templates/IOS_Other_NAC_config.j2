@@ -1,0 +1,131 @@
+
+
+
+vlan internal allocation policy ascending
+!
+!
+ip access-list extended ACL-ALLOW
+ permit ip any any
+!
+ip access-list extended ACL-DEFAULT
+ permit udp any eq bootpc any eq bootps 
+ permit udp any any eq domain
+ deny ip any any
+!
+ip access-list standard SNMP-CLIENTS
+ remark NAC Servers
+ permit 192.168.1.1
+ permit 10.10.1.1
+ permit 172.25.1.1
+ deny any log
+!
+dot1x guest-vlan supplicant
+dot1x critical eapol
+dot1x system-auth-control
+!
+authentication mac-move permit
+!
+ip dhcp snooping vlan 1-4094
+no ip dhcp snooping information option
+ip dhcp snooping
+no ip dhcp bootp ignore
+!
+!
+ip device tracking
+ip device tracking probe delay 6
+no ip device tracking probe use-svi
+{% if '15' in version %}
+device-sensor accounting
+{% endif %}
+!
+!
+mac address-table notification change
+!
+epm logging
+!
+lldp run
+cdp run
+!
+snmp-server source-interface informs {{ interface }}
+snmp-server source-interface traps {{ interface }}
+!
+snmp-server community PlainTextSNMP SNMP-CLIENTS
+!
+snmp-server host 192.168.1.1 traps version 2c PlainTextSNMP mac-notification
+snmp-server host 172.25.1.1 traps version 2c PlainTextSNMP mac-notification
+snmp-server host 10.10.1.1 traps version 2c PlainTextSNMP mac-notification
+snmp-server enable traps snmp linkdown linkup
+snmp-server enable traps mac-notification change
+!
+radius-server attribute 6 on-for-login-auth
+radius-server attribute 6 support-multiple
+radius-server attribute 8 include-in-access-req
+radius-server attribute 25 access-request include
+radius-server dead-criteria time 5 tries 3
+radius-server deadtime 30
+radius-server vsa send accounting
+radius-server vsa send authentication
+!
+ip radius source-interface {{ interface }}
+!
+aaa group server radius {{ region.nacName }}
+ server-private {{ region.nacPrimary }} auth-port 1812 acct-port 1813 key 0 PlainTextKey
+ server-private {{ region.nacSecondary }} auth-port 1812 acct-port 1813 key 0 PlainTextKey
+ server-private {{ region.nacTertiary }} auth-port 1812 acct-port 1813 key 0 PlainTextKey
+ ip radius source-interface {{ interface }}
+{% if vrf %}
+ ip vrf forwarding {{ vrf }}
+{% endif %}
+aaa server radius dynamic-author
+ client 192.168.1.1 server-key 0 PlainTextKey
+ client 172.25.1.1 server-key 0 PlainTextKey
+ client 10.10.1.1 server-key 0 PlainTextKey
+!
+aaa authentication dot1x default group {{ region.nacName }}
+aaa authorization network default group {{ region.nacName }}
+aaa accounting dot1x default start-stop group {{ region.nacName }}
+aaa accounting network default start-stop group {{ region.nacName }}
+aaa accounting system default start-stop broadcast group {{ region.nacName }} group {{ tacacsgroup }}
+!
+
+
+{% for trunk in trunks %}
+interface {{ trunk }}
+ip dhcp snooping trust
+{% endfor %}
+
+{% for int in dot1x_ints  %}
+default interface {{ int.int_name }}
+interface {{ int.int_name }}
+ shutdown
+{{ intInfo[int.int_name].int_description }}
+ switchport access vlan {{ access_vlan }}
+ switchport mode access
+ switchport nonegotiate
+ switchport voice vlan {{ voice_vlan }}
+ ip access-group ACL-DEFAULT in
+ authentication control-direction in
+ authentication event fail action next-method
+ authentication event server dead action authorize vlan {{ int.server_dead_vlan }}
+ authentication event server dead action authorize voice
+ authentication event no-response action authorize vlan {{ auth_fail_vlan }}
+ authentication event server alive action reinitialize
+ authentication host-mode multi-domain
+ authentication order mab dot1x
+ authentication priority dot1x mab
+ authentication port-control auto
+ authentication periodic
+ authentication timer reauthenticate server
+ authentication timer inactivity 30000
+ authentication violation restrict
+ mab
+ snmp trap mac-notification change added
+ snmp trap mac-notification change removed
+ dot1x pae authenticator
+ dot1x timeout tx-period 5
+ dot1x timeout supp-timeout 5
+ spanning-tree portfast
+ spanning-tree bpduguard enable
+ no shutdown
+{% endfor %}
+
