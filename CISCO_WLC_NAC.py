@@ -37,9 +37,8 @@ def NDA_CHANGE(username,password,counter,config,deploy,device_type,deviceList,ou
                 if "wlan" in line.lower():
                     wlan = line.strip().split()[0]
                     mgmt_dict.update({"wlan": wlan})
-
                 else:
-					deploy = 'no'
+                    deploy = 'no'
 
 
             # Generataommand List using JINJA
@@ -73,7 +72,7 @@ def NDA_CHANGE(username,password,counter,config,deploy,device_type,deviceList,ou
             connection.disconnect()
         # Create Exception for Command Auth Failure
         except Exception as exception:    # exceptions as exceptionOccured:
-            outputList.put('\n['+str(counter)+'] '+device+'- TACACS Configuration Error\n')
+            outputList.put('\n['+str(counter)+'] '+device+'- Configuration Error\n')
     outputList.put(None)
     return
 
