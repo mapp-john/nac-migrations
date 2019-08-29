@@ -344,7 +344,6 @@ def script(form,configSettings):
     NUM_THREADS = 20
     deviceList = queue.Queue()
     outputList = queue.Queue()
-    threadList = [None] * NUM_THREADS
 
     if len(devices) < NUM_THREADS:
         NUM_THREADS = len(devices)
