@@ -1,7 +1,3 @@
-#!/usr/bin/python
-#
-#
-
 import os
 import re
 import time
@@ -182,7 +178,6 @@ def script(form,dummyarg):
     NUM_THREADS = 20
     deviceList = queue.Queue()
     outputList = queue.Queue()
-    threadList = [None] * NUM_THREADS
 
     if len(devices) < NUM_THREADS:
         NUM_THREADS = len(devices)
@@ -206,8 +201,7 @@ def script(form,dummyarg):
 
     # loop for devices
     for i in range(NUM_THREADS):
-        threadList[i]=threading.Thread(target=NDA_CHANGE, args=(username,password,counter,config,deploy,device_type,devices,deviceList,outputList,region))
-        threadList[i].start()
+        Thread(target=NDA_CHANGE, args=(username,password,counter,config,deploy,device_type,devices,deviceList,outputList,region)).start()
         time.sleep(1)
 
     with open(outputFileName,'w') as outputFile:
