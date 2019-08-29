@@ -1,0 +1,126 @@
+
+
+{% if region == 1 %}
+config radius auth disable 1
+config radius auth disable 2
+config radius auth disable 3
+config radius acct disable 1
+config radius acct disable 2
+config radius acct disable 3
+config radius auth add 1 192.168.1.1 1812 ascii PlainTextKey
+config radius auth add 2 10.10.1.1  1812 ascii PlainTextKey
+config radius auth add 3 172.25.1.1   1812 ascii PlainTextKey
+config radius acct add 1 192.168.1.1 1813 ascii PlainTextKey
+config radius acct add 2 10.10.1.1  1813 ascii PlainTextKey
+config radius acct add 3 172.25.1.1   1813 ascii PlainTextKey
+config radius auth enable 1
+config radius auth enable 2
+config radius auth enable 3
+config radius acct enable 1
+config radius acct enable 2
+config radius acct enable 3
+
+
+{% if wlan is defined %}
+config wlan disable {{ wlan }}
+
+config wlan radius_server auth del {{ wlan }} all
+config wlan radius_server acct del {{ wlan }} all
+config wlan radius_server auth add {{ wlan }} 1
+config wlan radius_server auth add {{ wlan }} 2
+config wlan radius_server auth add {{ wlan }} 3
+config wlan radius_server acct add {{ wlan }} 1
+config wlan radius_server acct add {{ wlan }} 2
+config wlan radius_server acct add {{ wlan }} 3
+config wlan enable {{ wlan }}
+{% endif %}
+
+
+
+
+
+{% elif region == 2 %}
+config radius auth disable 1
+config radius auth disable 2
+config radius auth disable 3
+config radius acct disable 1
+config radius acct disable 2
+config radius acct disable 3
+config radius auth add 1 172.25.1.1   1812 ascii PlainTextKey
+config radius auth add 2 192.168.1.1 1812 ascii PlainTextKey
+config radius auth add 3 10.10.1.1  1812 ascii PlainTextKey
+config radius acct add 1 172.25.1.1   1813 ascii PlainTextKey
+config radius acct add 2 192.168.1.1 1813 ascii PlainTextKey
+config radius acct add 3 10.10.1.1  1813 ascii PlainTextKey
+config radius auth enable 1
+config radius auth enable 2
+config radius auth enable 3
+config radius acct enable 1
+config radius acct enable 2
+config radius acct enable 3
+
+
+{% if wlan is defined %}
+config wlan disable {{ wlan }}
+
+config wlan radius_server auth del {{ wlan }} all
+config wlan radius_server acct del {{ wlan }} all
+config wlan radius_server auth add {{ wlan }} 1
+config wlan radius_server auth add {{ wlan }} 2
+config wlan radius_server auth add {{ wlan }} 3
+config wlan radius_server acct add {{ wlan }} 1
+config wlan radius_server acct add {{ wlan }} 2
+config wlan radius_server acct add {{ wlan }} 3
+config wlan enable {{ wlan }}
+{% endif %}
+
+
+
+
+
+
+{% elif region == 3 %}
+config radius auth disable 1
+config radius auth disable 2
+config radius auth disable 3
+config radius acct disable 1
+config radius acct disable 2
+config radius acct disable 3
+config radius auth add 1 10.10.1.1   1812 ascii PlainTextKey
+config radius auth add 2 172.25.1.1    1812 ascii PlainTextKey
+config radius auth add 3 192.168.1.1  1812 ascii PlainTextKey
+config radius acct add 1 10.10.1.1  1813 ascii PlainTextKey
+config radius acct add 2 172.25.1.1   1813 ascii PlainTextKey
+config radius acct add 3 192.168.1.1 1813 ascii PlainTextKey
+config radius auth enable 1
+config radius auth enable 2
+config radius auth enable 3
+config radius acct enable 1
+config radius acct enable 2
+config radius acct enable 3
+
+
+{% if wlan is defined %}
+config wlan disable {{ wlan }}
+
+config wlan radius_server auth del {{ wlan }} all
+config wlan radius_server acct del {{ wlan }} all
+config wlan radius_server auth add {{ wlan }} 1
+config wlan radius_server auth add {{ wlan }} 2
+config wlan radius_server auth add {{ wlan }} 3
+config wlan radius_server acct add {{ wlan }} 1
+config wlan radius_server acct add {{ wlan }} 2
+config wlan radius_server acct add {{ wlan }} 3
+config wlan enable {{ wlan }}
+{% endif %}
+
+
+{% endif %}
+
+
+config radius auth delete 4
+config radius auth delete 5
+config radius auth delete 6
+config radius acct delete 4
+config radius acct delete 5
+config radius acct delete 6
