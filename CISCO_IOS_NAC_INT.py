@@ -9,7 +9,7 @@ import random
 import logging
 import netmiko
 import paramiko
-import threading
+from threading import Thread
 import queue as queue
 from zipfile import ZipFile, ZIP_DEFLATED
 from EmailModule import emailHTMLWithRenamedAttachment
@@ -188,7 +188,6 @@ def script(form,configSettings):
     #NUM_THREADS = 20
     #deviceList = queue.Queue()
     outputList = queue.Queue()
-    #threadList = [None] * NUM_THREADS
 
     #if len(devices) < NUM_THREADS:
     #    NUM_THREADS = len(devices)
@@ -211,8 +210,7 @@ def script(form,configSettings):
 
     # loop for devices
     #for i in range(NUM_THREADS):
-    #    threadList[i]=threading.Thread(target=NDA_CHANGE, args=(username,password,counter,deploy,device_type,device,outputList,outputDirectory,interfaces))
-    #    threadList[i].start()
+    #    Thread(target=NDA_CHANGE, args=(username,password,counter,deploy,device_type,device,outputList,outputDirectory,interfaces)).start()
     #    time.sleep(1)
     NDA_CHANGE(username,password,counter,deploy,device_type,device,outputList,outputDirectory,interfaces)
 
