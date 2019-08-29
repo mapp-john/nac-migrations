@@ -1,0 +1,67 @@
+
+config mgmtuser add backuplocaladmin BackupLocalPassword read-write
+
+{% if region == 1 %}
+config tacacs auth disable 1
+config tacacs auth disable 2
+config tacacs auth disable 3
+config tacacs athr disable 1
+config tacacs athr disable 2
+config tacacs athr disable 3
+config tacacs acct disable 1
+config tacacs acct disable 2
+config tacacs acct disable 3
+config tacacs auth add 1 192.168.1.2 49 ascii PlainTextKey
+config tacacs auth add 2 10.10.1.2  49 ascii PlainTextKey
+config tacacs auth add 3 172.25.1.2   49 ascii PlainTextKey
+config tacacs athr add 1 192.168.1.2 49 ascii PlainTextKey
+config tacacs athr add 2 10.10.1.2  49 ascii PlainTextKey
+config tacacs athr add 3 172.25.1.2   49 ascii PlainTextKey
+config tacacs acct add 1 192.168.1.2 49 ascii PlainTextKey
+config tacacs acct add 2 10.10.1.2  49 ascii PlainTextKey
+config tacacs acct add 3 172.25.1.2   49 ascii PlainTextKey
+
+
+
+{% elif region == 2 %}
+config tacacs auth disable 1
+config tacacs auth disable 2
+config tacacs auth disable 3
+config tacacs athr disable 1
+config tacacs athr disable 2
+config tacacs athr disable 3
+config tacacs acct disable 1
+config tacacs acct disable 2
+config tacacs acct disable 3
+config tacacs auth add 1 172.25.1.2   49 ascii PlainTextKey
+config tacacs auth add 2 192.168.1.2 49 ascii PlainTextKey
+config tacacs auth add 3 10.10.1.2  49 ascii PlainTextKey
+config tacacs athr add 1 172.25.1.2   49 ascii PlainTextKey
+config tacacs athr add 2 192.168.1.2 49 ascii PlainTextKey
+config tacacs athr add 3 10.10.1.2  49 ascii PlainTextKey
+config tacacs acct add 1 172.25.1.2   49 ascii PlainTextKey
+config tacacs acct add 2 192.168.1.2 49 ascii PlainTextKey
+config tacacs acct add 3 10.10.1.2  49 ascii PlainTextKey
+
+
+{% elif region == 3 %}
+config tacacs auth disable 1
+config tacacs auth disable 2
+config tacacs auth disable 3
+config tacacs athr disable 1
+config tacacs athr disable 2
+config tacacs athr disable 3
+config tacacs acct disable 1
+config tacacs acct disable 2
+config tacacs acct disable 3
+config tacacs auth add 1 10.10.1.2  49 ascii PlainTextKey
+config tacacs auth add 2 172.25.1.2   49 ascii PlainTextKey
+config tacacs auth add 3 192.168.1.2 49 ascii PlainTextKey
+config tacacs athr add 1 10.10.1.2  49 ascii PlainTextKey
+config tacacs athr add 2 172.25.1.2   49 ascii PlainTextKey
+config tacacs athr add 3 192.168.1.2 49 ascii PlainTextKey
+config tacacs acct add 1 10.10.1.2  49 ascii PlainTextKey
+config tacacs acct add 2 172.25.1.2   49 ascii PlainTextKey
+config tacacs acct add 3 192.168.1.2 49 ascii PlainTextKey
+
+{% endif %}
