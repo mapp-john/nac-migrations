@@ -161,10 +161,7 @@ template DEVICE_ACCESS_TEMPLATE
  switchport access vlan {{ access_vlan }}
  switchport mode access
  switchport voice vlan {{ voice_vlan }}
- storm-control broadcast level 0.10
- storm-control action trap
  spanning-tree portfast
- spanning-tree bpduguard enable
  mab
  access-session host-mode multi-domain
  access-session control-direction in
@@ -182,10 +179,7 @@ template MULTIAUTH_ACCESS_TEMPLATE
  switchport access vlan {{ access_vlan }}
  switchport mode access
  switchport voice vlan {{ voice_vlan }}
- storm-control broadcast level 0.10
- storm-control action trap
  spanning-tree portfast
- spanning-tree bpduguard enable
  mab
  access-session host-mode multi-auth
  access-session control-direction in
@@ -213,7 +207,6 @@ interface {{ int.int_name }}
  snmp trap mac-notification change added
  snmp trap mac-notification change removed
  source template DEVICE_ACCESS_TEMPLATE
- service-policy output QUEUE-OUTPUT-LAN
  no shutdown
 !
 {% endfor %}
