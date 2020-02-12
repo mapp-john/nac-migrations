@@ -131,7 +131,7 @@ def NAC_CHANGE(username,password,counter,deploy,device_type,devices,deviceList,o
                     voice_vlan = line[0]
                 elif 'voice_3_vlan' in line[1]:
                     voice_vlan = line[0]
-                elif 'voice_4_vlan in line[1]:
+                elif 'voice_4_vlan' in line[1]:
                     voice_vlan = line[0]
                 elif 'voice_5_vlan' in line[1]:
                     voice_vlan = line[0]
