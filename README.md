@@ -7,8 +7,8 @@ Main scripts are designed to be used in conjunction with a web app
 Designed to be called as a function
 NAC_CHANGE(config_txt,os_version,access_vlan,voice_vlan,auth_fail_vlan)
 
-Example:
-'''
+**Example:**
+```python
 >>> from CISCO_IOS_IBNS2 import NAC_CHANGE
 >>> NAC_CHANGE('../Test/3850 sh run.txt','16.9.4','50','20','88')
 ***********************************************************************************************
@@ -16,4 +16,4 @@ Example:
 Config Output File: livdto.txt
 ***********************************************************************************************
 >>> 
-'''
+```
