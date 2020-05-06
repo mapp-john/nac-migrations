@@ -9,7 +9,7 @@ import netmiko
 import paramiko
 from threading import Thread
 import subprocess
-import queue as queue
+import queue 
 from pprint import pprint
 from EmailModule import emailHTMLWithRenamedAttachment
 
