@@ -10,7 +10,7 @@ import logging
 import netmiko
 import paramiko
 from threading import Thread
-import queue as queue
+import queue
 from zipfile import ZipFile, ZIP_DEFLATED
 from EmailModule import emailHTMLWithRenamedAttachment
 
