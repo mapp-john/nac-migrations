@@ -13,7 +13,7 @@ import paramiko
 import traceback
 from threading import Thread
 import subprocess
-import queue as queue
+import queue 
 from zipfile import ZipFile, ZIP_DEFLATED
 from pprint import pprint
 from EmailModule import emailHTMLWithRenamedAttachment
